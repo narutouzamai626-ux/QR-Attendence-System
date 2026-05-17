@@ -154,12 +154,14 @@ def send_otp():
     msg.body = f"Your OTP is {otp}"
 
     try:
-        mail.send(msg)
-        return "OTP sent successfully"
-    except Exception as e:
-        return f"Mail Error: {str(e)}"
+        with mail.connect() as conn:
+            conn.send(msg)
 
-    return "OTP Sent Successfully"
+        return "OTP Sent Successfully"
+
+    except Exception as e:
+
+        return f"Mail Error: {str(e)}"
 
 
 # =========================
