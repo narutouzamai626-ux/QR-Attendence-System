@@ -4,7 +4,6 @@ import random
 import sqlite3
 
 from flask import Flask, redirect, render_template, request, session
-from flask_mail import Mail, Message
 from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -21,18 +20,6 @@ app = Flask(__name__)
 # SECRET KEY
 # =========================
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "attendance_system")
-
-# =========================
-# FLASK MAIL CONFIGURATION
-# =========================
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_TIMEOUT'] = 10
-app.config['MAIL_USERNAME'] = os.getenv("EMAIL_USER")
-app.config['MAIL_PASSWORD'] = os.getenv("EMAIL_PASS")
-
-mail = Mail(app)
 
 # =========================
 # DATABASE INITIALIZATION
@@ -116,7 +103,6 @@ def login():
 
         conn.close()
 
-        # user[3] = password column
         if user and check_password_hash(user[3], password):
 
             session["user"] = username
@@ -145,23 +131,12 @@ def send_otp():
     # OTP EXPIRY TIME
     session["otp_time"] = datetime.now().timestamp()
 
-    msg = Message(
-        "Email Verification",
-        sender=app.config['MAIL_USERNAME'],
-        recipients=[gmail]
-    )
-
-    msg.body = f"Your OTP is {otp}"
-
-    try:
-        with mail.connect() as conn:
-            conn.send(msg)
-
-        return "OTP Sent Successfully"
-
-    except Exception as e:
-
-        return f"Mail Error: {str(e)}"
+    # SHOW OTP DIRECTLY
+    return f"""
+    <h2>OTP Generated Successfully</h2>
+    <p>Your OTP is: <b>{otp}</b></p>
+    <a href='/signup'>Back to Signup</a>
+    """
 
 
 # =========================
@@ -338,7 +313,6 @@ def add_subject():
 
         return redirect("/admin")
 
-    # CLEAN SUBJECT INPUT
     subject = request.form["subject"].strip().title()
 
     conn = sqlite3.connect("students.db")
@@ -389,11 +363,9 @@ def generate_qr(subject):
 
         return redirect("/admin")
 
-    # STORE ACTIVE QR DETAILS
     ACTIVE_QR["subject"] = subject
     ACTIVE_QR["created_at"] = datetime.now()
 
-    # AUTO LIVE URL
     data = request.host_url + f"mark_attendance/{subject}"
 
     qr = qrcode.make(data)
@@ -417,7 +389,6 @@ def mark_attendance(subject):
 
     today = str(datetime.now().date())
 
-    # ACTIVE QR EXISTS?
     if ACTIVE_QR["created_at"] is None or ACTIVE_QR["subject"] != subject:
 
         return """
@@ -426,7 +397,6 @@ def mark_attendance(subject):
         <a href='/user_dashboard'>Back</a>
         """, 400
 
-    # 10 MINUTE TIMER CHECK
     time_elapsed = datetime.now() - ACTIVE_QR["created_at"]
 
     if time_elapsed > timedelta(minutes=10):
@@ -440,7 +410,6 @@ def mark_attendance(subject):
     conn = sqlite3.connect("students.db")
     cursor = conn.cursor()
 
-    # EXISTING ATTENDANCE CHECK
     cursor.execute(
         """
         SELECT * FROM attendance
@@ -457,7 +426,6 @@ def mark_attendance(subject):
 
         return f"Attendance Already Marked For {subject}"
 
-    # INSERT ATTENDANCE
     cursor.execute(
         """
         INSERT INTO attendance

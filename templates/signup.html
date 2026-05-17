@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Signup Page</title>
 
     <link rel="stylesheet" href="../static/style.css">
@@ -22,33 +24,8 @@
         <input type="text"
                name="username"
                placeholder="Enter Username"
-               class="input-box">
-
-        <br><br>
-
-        <label>Gmail</label>
-        <br>
-
-        <input type="email"
-               name="gmail"
-               placeholder="Enter Gmail"
-               class="input-box">
-
-        <br><br>
-
-        <label>Verification Code</label>
-        <br>
-
-        <input type="text"
-               name="otp"
-               placeholder="Enter Verification Code"
-               class="input-box">
-
-        <br><br>
-
-        <button type="submit" formaction="/send_otp">
-            Send OTP
-        </button>
+               class="input-box"
+               required>
 
         <br><br>
 
@@ -58,7 +35,8 @@
         <input type="password"
                name="password"
                placeholder="Enter Password"
-               class="input-box">
+               class="input-box"
+               required>
 
         <br><br>
 
@@ -68,7 +46,8 @@
         <input type="password"
                name="confirm_password"
                placeholder="Re-enter Password"
-               class="input-box">
+               class="input-box"
+               required>
 
         <br><br>
 
