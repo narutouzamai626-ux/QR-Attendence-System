@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Admin Dashboard</h1>
+
+    <hr>
+
+    <h2>Add Subjects</h2>
+
+    <form action="/add_subject" method="post">
+
+        <input type="text"
+               name="subject"
+               placeholder="Enter Subject Name"
+               class="input-box">
+
+        <br><br>
+
+        <button type="submit">
+            Add Subject
+        </button>
+
+    </form>
+
+    <br><br>
+
+    <h2>Available Subjects</h2>
+    {% for subject in subjects %}
+
+    <p>
+        {{ subject[1] }}
+
+        <a href="/delete_subject/{{ subject[0] }}">
+            <button>Delete</button>
+        </a>
+    </p>
+    {% endfor %}
+
+    <br><br>
+
+    <a href="/generate_qr">
+        <button>Generate QR</button>
+    </a>
+
+    <br><br>
+
+    <img src="{{ url_for('static', filename='attendance_qr.png') }}" width="200">
+
+    <hr>
+
+    <h2>Student Attendance</h2>
+
+    <table border="1">
+
+        <tr>
+            <th>Student Name</th>
+            <th>Subject</th>
+            <th>Attendance %</th>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+    </table>
+
+    <br><br>
+
+    <a href="/admin_profile">
+        <button>Profile</button>
+    </a>
+
+</div>
+
+</body>
+</html>

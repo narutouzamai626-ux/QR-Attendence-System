@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Student Signup</h1>
+
+    <form action="/signup" method="post">
+
+        <label>Username</label>
+        <br>
+
+        <input type="text"
+               name="username"
+               placeholder="Enter Username"
+               class="input-box">
+
+        <br><br>
+
+        <label>Gmail</label>
+        <br>
+
+        <input type="email"
+               name="gmail"
+               placeholder="Enter Gmail"
+               class="input-box">
+
+        <br><br>
+
+        <label>Verification Code</label>
+        <br>
+
+        <input type="text"
+               name="otp"
+               placeholder="Enter Verification Code"
+               class="input-box">
+
+        <br><br>
+
+        <button type="submit" formaction="/send_otp">
+            Send OTP
+        </button>
+
+        <br><br>
+
+        <label>Password</label>
+        <br>
+
+        <input type="password"
+               name="password"
+               placeholder="Enter Password"
+               class="input-box">
+
+        <br><br>
+
+        <label>Re-enter Password</label>
+        <br>
+
+        <input type="password"
+               name="confirm_password"
+               placeholder="Re-enter Password"
+               class="input-box">
+
+        <br><br>
+
+        <button type="submit">
+            Signup
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

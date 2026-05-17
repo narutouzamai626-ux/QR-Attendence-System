@@ -1,0 +1,98 @@
+body{
+    margin: 0;
+    padding: 40px;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #7b2ff7, #9d4edd);
+    text-align: center;
+}
+
+.container{
+    background-color: white;
+    width: 400px;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    margin: auto;
+
+    box-shadow: 0px 5px 20px rgba(0,0,0,0.2);
+}
+
+h1{
+    color: #7b2ff7;
+    margin-bottom: 15px;
+}
+
+h2{
+    color: #ffffff;
+}
+
+p{
+    color: #ffffff;
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+.btn-group{
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+button{
+    background-color: #7b2ff7;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover{
+    background-color: #5f1fd1;
+}
+
+.signup-btn{
+    margin-top: 15px;
+}
+
+.input-box{
+    width: 80%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+label{
+    color: #7b2ff7;
+    font-weight: bold;
+}
+
+table{
+    width: 80%;
+    margin: auto;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th{
+    background-color: #7b2ff7;
+    color: white;
+    padding: 12px;
+}
+
+td{
+    padding: 10px;
+}
+
+hr{
+    margin: 30px 0;
+}
+.container p{
+    color: black;
+    font-size: 18px;
+}

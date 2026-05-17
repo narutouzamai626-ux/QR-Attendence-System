@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan QR Attendance</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>Scan QR Code</h1>
+    <p>Log in as a student, then hold the QR code up to your camera.</p>
+    
+    <div id="reader" style="width: 100%; max-width: 500px; margin: 0 auto;"></div>
+    
+    <br>
+    <a href="/user_dashboard">Back to Dashboard</a>
+</div>
+
+<script>
+    function onScanSuccess(decodedText, decodedResult) {
+        alert("QR Scanned! Redirecting...");
+        window.location.href = decodedText; 
+    }
+
+    function onScanFailure(error) {
+        // Leave empty
+    }
+
+    // Fixed setup object below:
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", { fps: 10, qrbox: 250 }
+    );
+    
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+</script>
+
+</body>
+</html>
