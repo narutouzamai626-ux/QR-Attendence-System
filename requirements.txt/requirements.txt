@@ -1,7 +1,0 @@
-Flask
-Flask-Mail
-python-dotenv
-qrcode
-pillow
-werkzeug
-gunicorn
