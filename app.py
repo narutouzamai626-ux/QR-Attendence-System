@@ -1,6 +1,5 @@
 import os
 from datetime import datetime, timedelta
-import random
 import sqlite3
 
 from flask import Flask, redirect, render_template, request, session
@@ -117,29 +116,6 @@ def login():
 
 
 # =========================
-# SEND OTP
-# =========================
-@app.route("/send_otp", methods=["POST"])
-def send_otp():
-
-    gmail = request.form["gmail"]
-
-    otp = str(random.randint(100000, 999999))
-
-    session["otp"] = otp
-
-    # OTP EXPIRY TIME
-    session["otp_time"] = datetime.now().timestamp()
-
-    # SHOW OTP DIRECTLY
-    return f"""
-    <h2>OTP Generated Successfully</h2>
-    <p>Your OTP is: <b>{otp}</b></p>
-    <a href='/signup'>Back to Signup</a>
-    """
-
-
-# =========================
 # STUDENT SIGNUP
 # =========================
 @app.route("/signup", methods=["GET", "POST"])
@@ -148,40 +124,21 @@ def signup():
     if request.method == "POST":
 
         username = request.form["username"]
-        gmail = request.form["gmail"]
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
-        entered_otp = request.form["otp"]
 
         # PASSWORD CHECK
         if password != confirm_password:
 
             return "Passwords Do Not Match"
 
-        # OTP EXISTS?
-        if "otp" not in session:
-
-            return "Please Generate OTP First"
-
-        # OTP EXPIRY CHECK (5 MINUTES)
-        otp_time = session.get("otp_time")
-
-        if datetime.now().timestamp() - otp_time > 300:
-
-            return "OTP Expired. Please Generate Again"
-
-        # OTP VERIFICATION
-        if entered_otp != session.get("otp"):
-
-            return "Invalid OTP"
-
         conn = sqlite3.connect("students.db")
         cursor = conn.cursor()
 
         # EXISTING USER CHECK
         cursor.execute(
-            "SELECT * FROM users WHERE username=? OR gmail=?",
-            (username, gmail)
+            "SELECT * FROM users WHERE username=?",
+            (username,)
         )
 
         existing_user = cursor.fetchone()
@@ -190,7 +147,7 @@ def signup():
 
             conn.close()
 
-            return "Username Or Gmail Already Exists"
+            return "Username Already Exists"
 
         # HASH PASSWORD
         hashed_password = generate_password_hash(password)
@@ -198,7 +155,7 @@ def signup():
         # INSERT USER
         cursor.execute(
             "INSERT INTO users (username, gmail, password) VALUES (?, ?, ?)",
-            (username, gmail, hashed_password)
+            (username, "", hashed_password)
         )
 
         conn.commit()
@@ -387,101 +344,4 @@ def mark_attendance(subject):
 
     username = session["user"]
 
-    today = str(datetime.now().date())
-
-    if ACTIVE_QR["created_at"] is None or ACTIVE_QR["subject"] != subject:
-
-        return """
-        <h1>Error</h1>
-        <p>No Active Attendance Session Found</p>
-        <a href='/user_dashboard'>Back</a>
-        """, 400
-
-    time_elapsed = datetime.now() - ACTIVE_QR["created_at"]
-
-    if time_elapsed > timedelta(minutes=10):
-
-        return """
-        <h1>Attendance Closed</h1>
-        <p>10 Minute Window Expired</p>
-        <a href='/user_dashboard'>Back</a>
-        """, 403
-
-    conn = sqlite3.connect("students.db")
-    cursor = conn.cursor()
-
-    cursor.execute(
-        """
-        SELECT * FROM attendance
-        WHERE username=? AND subject=? AND date=?
-        """,
-        (username, subject, today)
-    )
-
-    existing_attendance = cursor.fetchone()
-
-    if existing_attendance:
-
-        conn.close()
-
-        return f"Attendance Already Marked For {subject}"
-
-    cursor.execute(
-        """
-        INSERT INTO attendance
-        (username, subject, date, status)
-        VALUES (?, ?, ?, ?)
-        """,
-        (username, subject, today, "Present")
-    )
-
-    conn.commit()
-    conn.close()
-
-    return f"""
-    <h1>Success</h1>
-    <p>Attendance Marked Successfully For {subject}</p>
-    <a href='/user_dashboard'>Dashboard</a>
-    """
-
-
-# =========================
-# QR SCANNER PAGE
-# =========================
-@app.route("/scan")
-def scan():
-
-    if "user" not in session:
-
-        return redirect("/login")
-
-    return render_template("scanner.html")
-
-
-# =========================
-# LOGOUT
-# =========================
-@app.route("/logout")
-def logout():
-
-    session.clear()
-
-    return redirect("/")
-
-
-# =========================
-# INITIALIZE DATABASE
-# =========================
-init_db()
-
-
-# =========================
-# RUN APP
-# =========================
-if __name__ == "__main__":
-
-    app.run(
-        host="0.0.0.0",
-        port=8000,
-        debug=False
-    )
+    today = str(datetime)
